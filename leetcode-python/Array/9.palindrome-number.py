@@ -1,4 +1,4 @@
-# Time: O(1)
+# Time: O(log_10^{n})
 # Space: O(1)
 
 class Solution:
