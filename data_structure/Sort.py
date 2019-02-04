@@ -1,4 +1,4 @@
-
+# 常见排序算法
 # Bubble Sort
 def BubbleSort(alist):
     for passnum in range(len(alist)-1,0,-1):
