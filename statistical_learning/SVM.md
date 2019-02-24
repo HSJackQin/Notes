@@ -37,7 +37,7 @@ $$f(x)=sign(w \cdot x+b)$$
 
 损失函数的一个自然选择是误分类点的总数，即所谓的0-1损失函数，但是这样的损失函数**不是参数w,b的连续可导函数**，不易于优化，因此感知机选择误分类点到超平面的总距离作为损失函数。如图所示，虚线是感知机所选择的损失函数。（实线是SVM的损失函数，后面讲）
 
-@import "lossfunction.png" {width="400px" height="200px" title="损失函数" alt="我的 alt"}
+@import "pictures/lossfunction.png" {width="400px" height="200px" title="损失函数" alt="我的 alt"}
 
 由于单个点到分离超平面$w \cdot x + b = 0$的距离是$\frac{1}{||w||} |w \cdot x_0 + b|$，其中$||w||$是w的$L_2$范数，所以可以写出感知机的损失函数为$$L(w,b) = - \sum_{x_i \in M} y_i (w \cdot x_i + b)$$
 
@@ -64,9 +64,9 @@ $$f(x)=sign(w \cdot x+b)$$
 
 - 支持向量机的输入输出空间：
 
-**输入空间**：欧式空间或离散集合
+  - **输入空间**：欧式空间或离散集合
 
-**特征空间**：欧式空间或者希尔伯特空间
+  - **特征空间**：欧式空间或者希尔伯特空间
 
 输入都是由输入空间转换到特征空间，所以支持向量机的学习是在特征空间进行的。
 
@@ -81,11 +81,11 @@ $$\gamma_i = \frac{\hat{\gamma_i}}{||w||}$$ $$\gamma = \frac{\hat{\gamma}}{||w||
 
 - 间隔最大化：**是指让间隔最小的点到超平面的间隔也最大，而不是所有点的平均距离最大**。
 
-@import "margin.png" 
+@import "pictures/margin.png" 
 
 - 最优化问题
 
-@import "SVM1.png"
+@import "pictures/SVM1.png"
 
 - 支持向量和间隔边界
 
@@ -107,7 +107,7 @@ $$\gamma_i = \frac{\hat{\gamma_i}}{||w||}$$ $$\gamma = \frac{\hat{\gamma}}{||w||
 
 理解线性不可分的含义，以及引入松弛变量为了解决的问题。并结合支持向量进一步理解。
 
-@import "SVM2.png"
+@import "pictures/SVM2.png"
 
 可以证明$w$的解是唯一的，但$b$的解不唯一。
 
@@ -119,14 +119,14 @@ $$\gamma_i = \frac{\hat{\gamma_i}}{||w||}$$ $$\gamma = \frac{\hat{\gamma}}{||w||
 
 - <font color=red>支持向量</font>
 
-@import "soft margin.png"
+@import "pictures/soft margin.png"
 
-@import "soft margin2.png"
+@import "pictures/soft margin2.png"
 
 - <font color=red>合页损失函数</font>
 
 
-@import "lossfunction.png"
+@import "pictures/lossfunction.png"
 
 线性支持向量机的另一种解释是优化如下目标函数：
 
@@ -162,3 +162,4 @@ $$\sum_{i=1}^{N} [1-y_i (w \cdot x_i + b)]_+ + \lambda ||w||^2$$
 
 ### 3、神经网络
 
+- 手写pdf、gnn ppt
