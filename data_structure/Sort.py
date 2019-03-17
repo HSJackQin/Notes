@@ -1,5 +1,6 @@
 # 常见排序算法
 # Bubble Sort
+# Time: O(n^2)
 def BubbleSort(alist):
     for passnum in range(len(alist)-1,0,-1):
         for j in range(passnum):
@@ -27,6 +28,7 @@ alist = [54,26,93,17,77,31,44,55,20]
 ShortBubbleSort(alist)
 
 # Select Sort
+# Time: O(n^2)
 def SelectSort(alist):
     for passnum in range(len(alist)-1,0,-1):
         maxlocate = 0
@@ -40,6 +42,7 @@ alist = [54,26,93,17,77,31,44,55,20]
 SelectSort(alist)
             
 # Insert Sort
+# Time: O(n^2)
 def InsertSort(alist):
     for position in range(1,len(alist)):
         currentvalue = alist[position]
@@ -54,6 +57,7 @@ alist = [54,26,93,17,77,31,44,55,20]
 InsertSort(alist)
 
 # Shell Sort
+# Time: O(n)~O(n^2)
 def ShellSort(alist):
     gap = len(alist)//2
     while gap > 1:
@@ -76,6 +80,7 @@ alist = [54,26,93,17,77,31,44,55,20]
 ShellSort(alist)
 
 # Merge Sort(1)
+# Time: O(nlogn)
 def mergeSort(alist):
     if len(alist) > 1:
         mid = len(alist)//2
@@ -124,6 +129,8 @@ def MergeSort(alist,first=0,last=8):
         # 下一步该合并了
         
 # Quick Sort
+# Time: O(nlogn), but sometimes up to O(n^2)
+# Space: O(1)
 def QuickSort(alist):
     QuickSortHelper(alist,0,len(alist)-1)
 
@@ -147,7 +154,7 @@ def partition(alist,first,last):
             done = True
         else:
             alist[leftmark], alist[rightmark] = alist[rightmark], alist[leftmark]
-    alist[first], alist[rightmark] = alist[rightmark], alist[first]
+    alist[first], alist[rightmark] = alist[rightmark], alist[first] #枢轴值和分割点的值交换
     return rightmark
 
 alist = [54,26,93,17,77,31,44,55,20]
