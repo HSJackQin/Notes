@@ -13,6 +13,8 @@
 
 1. 线性模型
 
+1. 广义线性模型
+
 ### 1、统计学习概念
 
 - <font color=red>统计学习方法的三要素：模型、策略、算法</font>
@@ -103,3 +105,14 @@
 - `牛顿法、拟牛顿等`
 
 - 最优化相关资料
+
+### 3、广义线性模型（GLM）
+
+逻辑回归和线性回归都属于广义线性模型，下面我们详细介绍。
+
+参考：
+
+https://www.zhihu.com/question/35322351
+
+https://hyzhan.github.io/2017/05/23/2017-05-23-%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92LR%E6%8E%A8%E5%AF%BC%EF%BC%88sigmoid%EF%BC%8C%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0%EF%BC%8C%E6%A2%AF%E5%BA%A6%EF%BC%8C%E5%8F%82%E6%95%B0%E6%9B%B4%E6%96%B0%E5%85%AC%E5%BC%8F%EF%BC%89/
+
