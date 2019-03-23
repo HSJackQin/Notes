@@ -218,6 +218,63 @@ class Solution:
 
 > 18.删除链表的节点
 
+- (1)删除链表中指定的节点
+
+由于单链表中不含有指向前一个节点的指针，所以常规删除操作需要从头遍历，但本题要求
+时间复杂度O(1)，因此我们采用将要删除节点的下一个节点的值赋给待删除节点，然后删除该节点的下一个节点；
+但如果待删除节点位于尾部，则只能采取从头遍历的方法删除。
+
+```python
+class ListNode(object):
+    def __init__(self, x, next=None):
+        self.val = x
+        self.next = next
+class Solution:
+    def DeleteNode(self, pHead, pDelete):
+        if pHead is None or pDelete is None:
+            return 
+        if pDelete.next: #一般情况，当要删除的节点不是尾节点时
+            pDelete.val = pDelete.next.val
+            pDelete.next = pDelete.next.next
+        elif pHead is pDelete: #当链表只有一个节点时
+            pHead = None
+        else: #链表有多个节点，且要删除的节点是尾节点时
+            pNode = pHead
+            while pNode.next != pDelete:
+                pNode = pNode.next
+            pNode.next = None
+        return pHead
+```
+
+- (2)删除链表中重复的节点
+
+```python
+class Solution:
+    def DeleteDuplication(self, pHead):
+        if pHead is None:
+            return
+        pPre, pNode = None, pHead
+        toBeDeleted = False
+        while pNode:
+            if pNode.next and pNode.val == pNode.next.val:
+                toBeDeleted = True
+            if not toBeDeleted:
+                pPre = pNode
+                pNode = pNode.next
+            else:
+                value = pNode.val
+                pDelete = pNode
+                while pDelete and pDelete.val == value:
+                    pDelete = pDelete.next
+                if pPre is None:
+                    pHead = pDelete
+                else:
+                    pPre.next = pDelete
+                pNode = pDelete
+        return pHead
+```
+**报错，待纠正**
+
 > 21.调整数组顺序使奇数位于偶数前面
 
 > 22.链表中倒数第K个节点
@@ -310,6 +367,43 @@ class Solution:
 
 
 > 52.两个链表的第一个公共节点
+
+思路简单，考察链表的编程能力
+
+```python
+class ListNode:
+    def __init__(self, x):
+        self.val = x
+        self.next = None
+
+class Solution:
+    def FindFirstCommonNode(self, pHead1, pHead2):
+        if pHead1 is None or pHead2 is None: #判断特殊用例
+            return
+        pNode1, pNode2 = pHead1, pHead2 #进行第一次遍历，得到两链表的长度
+        len1, len2 = 1, 1
+        while pNode1.next is not None:
+            pNode1 = pNode1.next
+            len1 += 1
+        while pNode2.next is not None:
+            pNode2 = pNode2.next
+            len2 += 1
+        pCur1, pCur2 = pHead1, pHead2 #进行第二次遍历，寻找公共节点
+        if len1 > len2:
+            for i in range(len1-len2):
+                pCur1 = pCur1.next
+        else:
+            for j in range(len2-len1):
+                pCur2 = pCur2.next
+        while pCur1 and pCur2 and pCur1 != pCur2:
+            pCur1 = pCur1.next
+            pCur2 = pCur2.next
+        if pCur1 is not None:
+            return pCur1
+        return None
+```
+
+            
 
 > 54.二叉搜索树的第K大节点
 
