@@ -246,16 +246,16 @@ class Solution:
         return pHead
 ```
 
-- (2)删除链表中重复的节点
+- (2)删除链表中重复的节点（是指重复的都删去，而不是留一份）
 
 ```python
 class Solution:
-    def DeleteDuplication(self, pHead):
-        if pHead is None:
-            return
+    def deleteDuplication(self, pHead):
+        if pHead is None or pHead.next is None:
+            return pHead
         pPre, pNode = None, pHead
-        toBeDeleted = False
         while pNode:
+            toBeDeleted = False
             if pNode.next and pNode.val == pNode.next.val:
                 toBeDeleted = True
             if not toBeDeleted:
@@ -273,13 +273,15 @@ class Solution:
                 pNode = pDelete
         return pHead
 ```
-**报错，待纠正**
+
+---
 
 > 21.调整数组顺序使奇数位于偶数前面
 
 > 22.链表中倒数第K个节点
 
-这里要注意特殊用例的情况，即保证每一个节点引用都是合法的。
+定义快慢两个指针，快指针先走k步，然后快慢指针一起走，快指针到头时慢指针的位置就是
+倒数第K个节点。这里要注意特殊用例的情况，即保证每一个节点引用都是合法的。
 
 ```python
 class Solution:
@@ -302,19 +304,198 @@ class Solution:
 
 > 23.链表中环的入口节点
 
+首先通过快慢指针判断是否有环，如果有，令fast指针回到原地，
+slow和fast同速度，则相遇点就是环的入口节点。
 
+```python
+class Solution:
+    def EntryNodeOfLoop(self, pHead):
+        slow, fast = pHead, pHead
+        while fast and fast.next:
+            slow, fast = slow.next, fast.next.next
+            if slow is fast:
+                fast = pHead
+                while fast is not slow:
+                    fast, slow = fast.next, slow.next
+                return fast
+        return None
+```
+
+---
 
 > 24.反转链表
 
+本题也可以使用递归和迭代两种思路求解，递归较容易，迭代考验操作。
+想明白三指针（其实就是两个指针）的移动顺序，注意列表的暂存和续接。
 
+（1）两指针
+
+```python
+class Solution:
+    def ReverseList(self, pHead):
+        pReverse = None
+        pPre, pNode = None, pHead #定义两指针
+        while pNode:
+            pNext = pNode.next #这里要把pNode之后的链表暂存
+            if not pNode.next:
+                pReverse = pNode
+            pNode.next = pPre #注意这里的顺序！！
+            pPre = pNode
+            pNode = pNext
+        return pReverse
+```
+（2）递归
+
+核心思想是从后往前，想明白每一步，得到部分反转的链表后，要遍历得到其尾节点。
+
+```python
+class Solution:
+    def ReverseList(self, pHead):
+        if not pHead:
+            return None
+        if not pHead.next:
+            return pHead
+        pReverse = self.ReverseList(pHead.next)
+        cur = pReverse
+        while cur.next:
+            cur = cur.next
+        cur.next = pHead
+        pHead.next = None
+        return pReverse
+```
+
+---
 
 > 25.合并两个排序的链表
 
+本题可以分析出两种解法，首先将合并过程从第一步开始考虑，第一步结束后的操作其实是
+重复的，因此可以写成递归的形式。也可以直接利用指针的移动解题，更考验对链表和指针的操作。
+
+（1）递归
+
+```python
+class Solution:
+    def Merge(self, pHead1, pHead2):
+        if pHead1 is None:
+            return pHead2
+        if pHead2 is None:
+            return pHead1
+        mergeNode = ListNode(0) #定义新的节点储存结果
+        if pHead1.val < pHead2.val:
+            mergeNode = pHead1
+            mergeNode.next = self.Merge(pHead1.next, pHead2)
+        else:
+            mergeNode = pHead2
+            mergeNode.next = self.Merge(pHead1, pHead2.next)
+        return mergeNode
+```
+
+（2）常规写法
+
+```python
+class Solution:
+    def Merge(self, pHead1, pHead2):
+        mergeNode, pNode1, pNode2 = ListNode(0), pHead1, pHead2
+        mergeCur = mergeNode
+        while pNode1 and pNode2:
+            while pNode1 and pNode1.val < pNode2.val:
+                mergeCur.next = pNode1 #这里需要注意不能用mergeCur = pNode1，而要加next，保证mergeNode节点不是空的！
+                pNode1 = pNode1.next
+                mergeCur = mergeCur.next
+            if pNode1:
+                while pNode2 and pNode1.val >= pNode2.val:
+                    mergeCur.next = pNode2
+                    pNode2 = pNode2.next
+                    mergeCur = mergeCur.next
+        while pNode1:
+            mergeCur.next = pNode1
+            pNode1 = pNode1.next
+            mergeCur = mergeCur.next
+        while pNode2:
+            mergeCur.next = pNode2
+            pNode2 = pNode2.next
+            mergeCur = mergeCur.next
+        return mergeNode.next
+```
+
+---
+
 > 26.树的子结构
+
+本题不难，想清楚过程就好，方法是递归，注意数据类型如果是小数，为了
+确保没问题，最后定义在一定误差范围内相等的函数作为相等的判断。
+
+```python
+class Solution:
+    def HasSubtree(self, pRoot1, pRoot2):
+        res = False
+        if pRoot1 is None or pRoot2 is None:
+            return False
+        if self.Equal(pRoot1.val, pRoot2.val):
+            res = self.IsSame(pRoot1, pRoot2)
+        if not res:
+            res = self.HasSubtree(pRoot1.left, pRoot2)
+        if not res:
+            res = self.HasSubtree(pRoot1.right, pRoot2)
+        return res
+    def IsSame(self, pRoot1, pRoot2):
+        if pRoot2 is None:
+            return True
+        if pRoot1 is None:
+            return False
+        if self.Equal(pRoot1.val, pRoot2.val):
+            return self.IsSame(pRoot1.left, pRoot2.left) and \
+                   self.IsSame(pRoot1.right, pRoot2.right)
+        else:
+            return False
+    def Equal(self, num1, num2):
+        if num1 - num2 > -0.0000001 and num1 - num2 < 0.0000001:
+            return True
+        else:
+            return False
+```
+
+---
 
 > 27.二叉树的镜像
 
+递归解法
+
+```python
+class Solution:
+    def Mirror(self, pRoot):
+        if pRoot is None:
+            return None
+        if pRoot.left is not None or pRoot.right is not None:
+            pRoot.left, pRoot.right = pRoot.right, pRoot.left
+            pRoot.left = self.Mirror(pRoot.left)
+            pRoot.right = self.Mirror(pRoot.right)
+        return pRoot
+```
+
+---
+
 > 28.对称的二叉树
+
+可以转化为两棵树是不是互为镜像，递归地去比就好
+
+```python
+class Solution:
+    def isSymmetrical(self, pRoot):
+        return self.isSymmetricalRecu(pRoot, pRoot)
+    def isSymmetricalRecu(self, pRoot1, pRoot2):
+        if pRoot1 is None and pRoot2 is None:
+            return True
+        if pRoot1 is None or pRoot2 is None:
+            return False
+        if pRoot1.val == pRoot2.val:
+            return self.isSymmetricalRecu(pRoot1.left, pRoot2.right) and \
+                   self.isSymmetricalRecu(pRoot1.right, pRoot2.left)
+        if pRoot1.val != pRoot2.val:
+            return False
+```
+
+---
 
 > 32.从上到下打印二叉树
 
@@ -356,15 +537,174 @@ class Solution:
 
 > 33.二叉搜索树的后序遍历序列
 
+剑指offer的用例是不全的，[1,2,7,4,6,5,3]是不对的，但可以通过newcoder的测试！
+
+```python
+class Solution:
+    def VerifySquenceOfBST(self, sequence):
+        if sequence == []:
+            return False
+        root = sequence[-1]
+        length = len(sequence)
+        for i in xrange(length):
+            if sequence[i] > root:
+                break
+        for j in xrange(i, length):
+            if sequence[j] < root:
+                return False
+        left = True
+        if i > 0:
+            left = self.VerifySquenceOfBST(sequence[:i])
+        right = True
+        if length - 2 > i:
+            right = self.VerifySquenceOfBST(sequence[i:length-1])
+        return left and right
+```
+
+---
+
 > 34.二叉树中和为某一值的路径
+
+递归，前序遍历
+
+```python
+class TreeNode:
+    def __init__(self, x):
+        self.val = x
+        self.left = None
+        self.right = None
+
+class Solution:
+    def FindPath(self, root, expectNumber):
+        if not root or root.val > expectNumber:
+            return []
+        if not root.left and not root.right and root.val == expectNumber:
+            return [[root.val]]
+        else:
+            expectNumber -= root.val
+            left = self.FindPath(root.left, expectNumber)
+            right = self.FindPath(root.right, expectNumber)
+            result = [[root.val]+i for i in left]
+            for j in right:
+                result += [[root.val]+j]
+            return result
+```
+
+---
+
+> 35.复杂链表的复制
+
+```python
+class RandomListNode:
+    def __init__(self, x):
+        self.label = x
+        self.next = None
+        self.random = None
+
+class Solution:
+    def Clone(self, pHead):
+
+```
 
 > 36.二叉搜索树与双向链表
 
+本题解法：中序遍历+递归，注意二叉搜索树和双向链表的关系（每个节点都是含有两个指针，可以相互转化）
+
+```python
+class Solution:
+    def Convert(self, pRootofTree):
+        if pRootofTree is None:
+            return None
+        if not pRootofTree.left and not pRootofTree.right:
+            return pRootofTree
+        
+        self.Convert(pRootofTree.left)
+        left = pRootofTree.left
+        if left:
+            while left.right:
+                left = left.right
+            left.right = pRootofTree
+            pRootofTree.left = left
+        
+        self.Convert(pRootofTree.right)
+        right = pRootofTree.right
+        if right:
+            while right.left:
+                right = right.left
+            pRootofTree.right = right
+            right.left = pRootofTree
+        if pRootofTree.left:
+            pHead = pRootofTree.left
+            while pHead.left:
+                pHead = pHead.left
+            pRootofTree = pHead
+        return pRootofTree
+```
+
 > 37.序列化二叉树
+
+通过带null的前序遍历序列，可以唯一确定一棵二叉树？
+
+这里通过前序遍历还原树，主要是要清楚前序遍历需要栈，而递归正好是一个隐式栈结构，
+类似的思想还有34题
+
+```python
+class Solution:
+    def __init__(self):
+        self.flag = -1  #初始化一个flag对象，并在全局进行计数更新
+    def Serialize(self, root):
+        res = []  #这里要返回一个字符串，不能是列表的形式！
+        if not root:
+            res.append('null')
+            return res
+        res.append(root.val)
+        res += self.Serialize(root.left)
+        res += self.Serialize(root.right)
+        return res
+    
+    def Serialize(self, root):
+        if not root:
+            return '#,'
+        return str(root.val)+','+self.Serialize(root.left)+self.Serialize(root.right)
+
+    def Deserialize(self, s):
+        self.flag += 1
+        l = s.split(',')
+        if self.flag >= len(l):
+            return None
+        root = None
+        if l[self.flag] != '#':
+            root = TreeNode(int(l[self.flag]))
+            root.left = self.Deserialize(s)
+            root.right = self.Deserialize(s)
+        return root
+```
+
+> 38.字符串的排列
 
 > 42.连续子数组的最大和
 
+从头开始遍历，并把当前的最大值暂存起来，这种思路和利用循环实现的动态规划是一样的
 
+```python
+class Solution:
+    def FindGreatestSumOfSubArray(self, array):
+        if array == []:
+            return 0
+        curSum = 0
+        curMax = -float('inf')
+        i = 0
+        while i < len(array):
+            curSum += array[i]
+            if curSum > curMax:
+                curMax = curSum
+            if curSum < 0:
+                curSum = 0
+            i += 1
+        return curMax
+```
+
+---
 
 > 52.两个链表的第一个公共节点
 
@@ -403,7 +743,7 @@ class Solution:
         return None
 ```
 
-            
+---
 
 > 54.二叉搜索树的第K大节点
 
