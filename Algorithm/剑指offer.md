@@ -216,6 +216,97 @@ class Solution:
 
 > 12.矩阵中的路径
 
+1、二维矩阵常常采用数组形式存储，因此其元素对应的一维数组的下标转换不要出错
+
+2、矩阵中的路线常可以利用回溯法求解
+
+本题从初始点开始（初始点从全矩阵开始扫描），采用回溯法依次探索其上下左右是否满足条件，从而判断出
+是否存在完整的匹配路线。
+
+```python
+class Solution:
+    def hasPath(self, matrix, rows, cols, path):
+        if matrix == [] or rows <= 0 or cols <= 0 or not path:
+            return False
+        lengthPath = 0            #表示此时匹配的是字符串的第几个元素，和下面的visited一样，都是要维护的全局变量
+        visited = [0]*(rows*cols) #visited是长度为总元素个数的一维数组，存放表示元素是否已经被访问
+        for row in range(rows):
+            for col in range(cols): #这里遍历方式初始化起点
+                if self.hasPathRecu(matrix, rows, cols, row, col, path, lengthPath, visited): #递归辅助函数，也是方法实现的主体
+                    return True
+        return False #默认返回False
+    
+    def hasPathRecu(self, matrix, rows, cols, row, col, path, lengthPath, visited):
+        if lengthPath == len(path): #这里表示如果匹配到最后一个元素都是对的，以至下标出界，则返回True，是递归的终止条件
+            return True
+        hasFound = False #这里定义其为默认的False，为了后面表示方便
+        if row >= 0 and col >= 0 and row < rows and col < cols and path[lengthPath] == matrix[row*cols + col] and not visited[row][col]:
+            visited[row*cols + col] = 1
+            lengthPath += 1
+            hasFound = self.hasPathRecu(matrix, rows, cols, row-1, col, path, lengthPath, visited) \ #这里的设计保证了如果返回是False，就将全局变量lengthPath和visited复原
+                    or self.hasPathRecu(matrix, rows, cols, row, col-1, path, lengthPath, visited) \
+                    or self.hasPathRecu(matrix, rows, cols, row+1, col, path, lengthPath, visited) \
+                    or self.hasPathRecu(matrix, rows, cols, row, col+1, path, lengthPath, visited)
+            if not hasFound: #这里决定了上面的调用在返回False的时候是可以把全局变量lengthPath和visited复原的
+                visited[row*cols + col] = 0
+                lengthPath -= 1
+        return hasFound
+```
+---
+
+> 14.剪绳子
+
+本题可以使用（1）动态规划；（2）贪心算法；求解。
+
+（1）动态规划：注意自顶向下设计，自底向上实施
+
+（2）贪心算法：注意背后的数学支撑
+
+```python
+#贪心算法
+class Solution:
+    def maxAfterCut(self, length): #length是绳子长度
+        if length < 2:
+            return 0
+        if length == 2:
+            return 1
+        if length == 3:
+            return 2
+        #尽可能去剪长度为3的段
+        timeOf3 = length // 3
+        if length - 3*timeOf3 == 1:
+            timeOf3 -= 1
+        timeOf2 = (length - 3*timeOf3) // 2
+        return pow(3,timeOf3)*(pow(2,timeOf2))
+```
+
+```python
+#动态规划
+class Solution:
+    def maxAfterCut(self, length):
+        if length < 2:
+            return 0
+        if length == 2:
+            return 1
+        if length == 3:
+            return 2
+        products = [0]*(length+1)
+        products[0] = 0
+        products[1] = 1
+        products[2] = 2
+        products[3] = 3
+        for i in range(4,length+1,1):
+            for j in range(1,(i//2)+1,1):
+                products[i] = max(products[i], products[j]*products[i-j])
+        return products[length]
+```
+
+---
+
+> 15.二进制中1的个数
+
+
+
 > 18.删除链表的节点
 
 - (1)删除链表中指定的节点
@@ -277,6 +368,8 @@ class Solution:
 ---
 
 > 21.调整数组顺序使奇数位于偶数前面
+
+
 
 > 22.链表中倒数第K个节点
 
@@ -681,6 +774,32 @@ class Solution:
 ```
 
 > 38.字符串的排列
+
+注意输出的格式要求，以及python处理字符串的方法。
+
+```python
+class Solution:
+    def Permutation(self, ss):
+        if not ss: #边界条件
+            return []
+        if len(ss) == 1: #递归的基本情况
+            return list(ss)
+        res = [] #定义存放结果的空列表
+        pStr = list(ss) #把传入的字符串转化为列表，方便操作
+        pStr.sort() #对这个list进行排序
+        for i in xrange(len(ss)):
+            if i > 0 and pStr[i] == pStr[i-1]: #这里考虑到了字符串中重复字符的情况
+                # 每当扫描到和上一个字符相重复的字符，就直接跳过，因为这些情况上一次已经考虑过了
+                # 当然，这要在这个数组已经排过序的情况下
+                continue
+            temp = self.Permutation(''.join(pStr[:i]) + ''.join(pStr[i+1:]))
+                # 这里是把切片的列表转换回字符串
+            for j in temp:
+                res.append(pStr[i] + j)
+        return res
+```
+
+---
 
 > 42.连续子数组的最大和
 
