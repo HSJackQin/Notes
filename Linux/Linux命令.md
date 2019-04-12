@@ -1,5 +1,92 @@
 # Linux常用命令总结
 
+## Linux安装及初始化流程（以Ubuntu 18.04为例）
+
+### 1、镜像下载及安装
+
+### 2、磁盘分区
+
+1. /boot 分区256mb， 这部分是分给Linux启动内核等所需的单独空间
+
+1. 交换分区swap，这个在虚拟机安装Linux时会用到，即指定Windows的虚拟内存大小，一般设置成当初分配给虚拟机的内存大小即可
+
+1. 最后将剩余空间全分给 / 即可
+
+### 3、初始化设置
+
+1. 语言建议默认的英文环境，不需要改为中文
+
+1. 在`setting -> display`中可以调整分辨率及缩放，打开terminal调整窗口及字体大小
+
+1. 设置root密码：`sudo passwd`设置初始密码，之后`su root`登陆即可
+
+1. 如果是虚拟机安装，还会提示安装VMware Tools，根据提示安装即可，`tar`将压缩文件解压后直接`sudo`执行即可，随后可以设置共享文件夹
+
+1. apt换国内源：
+  - `cd /etc/apt`
+  - `sudo mv ./sources.list ./sources.list.bak`
+  - `vi sources.list`
+  - 将以下内容复制进去即可（注意先`lsb_release -c`获取系统版本号检查一下）
+
+```bash
+deb http://mirrors.163.com/ubuntu/ bionic main restricted universe multiverse
+deb http://mirrors.163.com/ubuntu/ bionic-security main restricted universe multiverse
+deb http://mirrors.163.com/ubuntu/ bionic-updates main restricted universe multiverse
+deb http://mirrors.163.com/ubuntu/ bionic-proposed main restricted universe multiverse
+deb http://mirrors.163.com/ubuntu/ bionic-backports main restricted universe multiverse
+deb-src http://mirrors.163.com/ubuntu/ bionic main restricted universe multiverse
+deb-src http://mirrors.163.com/ubuntu/ bionic-security main restricted universe multiverse
+deb-src http://mirrors.163.com/ubuntu/ bionic-updates main restricted universe multiverse
+deb-src http://mirrors.163.com/ubuntu/ bionic-proposed main restricted universe multiverse
+deb-src http://mirrors.163.com/ubuntu/ bionic-backports main restricted universe multiverse
+```
+
+  - `sudo apt update`更新软件列表，会覆盖原来的缓存
+  - `sudo apt upgrade`将本机软件更新为最新
+
+6. 安装vim、ssh等常用工具
+
+  - `sudo apt install vim`
+  - `sudo apt install openssh-server`
+    - `ssh-keygen -t rsa`：生成公私钥
+  - `sudo apt install git`
+
+7. 卸载不需要的软件
+
+  - `sudo apt remove libreoffice-common`
+
+8. 安装
+
+  - 搜狗输入法:
+    - 先安装fcitx：`sudo apt install fcitx`
+    - `Language&support`里面添加中文
+    - 官网下载linux sougou文件
+    - 安装：
+    ```bash
+    sudo apt -f install
+    sudo dpkg -i sogoupinyin_2.2.0.0108_amd64
+    ```
+    - 之后需要注销重启，然后在右上角keyboard图标里面设置输入法切换
+
+  - chromium:
+  
+    - `sudo apt install chromium-browser`  
+  
+9. 安装anaconda及配置vscode
+
+  - 安装Anaconda
+    - https://mirrors.tuna.tsinghua.edu.cn/anaconda/archive/
+    - 安装时自动添加环境变量，完成后`source .bashrc`
+  
+  - VS code
+    - 官方安装即可
+    - 遇到没有写权限问题，暂时不知道怎么解决，暴力删除`.config/Code/`文件夹即可
+
+
+10. 主题及终端美化
+
+---
+
 参考：[Vamei's Blog](http://www.cnblogs.com/vamei/archive/2012/10/10/2718229.html)
 
 ### 启动
@@ -16,7 +103,12 @@
   - 可执行文件(executable file)
   - 别名(alias)
 
-
+- 执行命令
+  - `source`：在当前bash环境下读取并执行参数代表的脚本中的命令，该命令常用`.`来代替
+  - `sh`：重新建立一个子shell，并执行脚本的命令
+  - 区别：`sh`启动子shell，继承父shell中的环境变量，但其新建的，改变的变量不会影响父shell；但`source`是将脚本中的命令
+  依次读取并在当前shell中执行，因此脚本中所有新建，改变变量的语句都会保存在当前shell中，在很多时候善用`source`命令可以
+  省去重新启动bash的麻烦
 
 - 命令查询
   - `whatis`：一句话介绍命令
@@ -25,13 +117,22 @@
   - `which`：查找命令位置
   - `type`：了解命令类型
 
-- `alias`：重命名，例如`alias gita = "git add"`
+- `alias`：重命名，例如`alias gita="git add"`，注意等号两边不要有空格！
 - `Ctrl + C`：中止运行中的命令
 - `Ctrl + Z`：暂停运行中的命令
+
+### （2）文件管理
 
 - 文件操作
   - `ls`
   
+- 下载和传输
+  - scp
+  - rsync
+  - wget：`wget https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data`
+
+
+
 
 - 进程管理
 
