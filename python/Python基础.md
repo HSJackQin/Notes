@@ -3,7 +3,7 @@
 参考：
 [廖雪峰的Python教程](https://www.liaoxuefeng.com/wiki/0014316089557264a6b348958f449949df42a6d3a2e542c000)
 &emsp;[Vamei's Blog](https://www.cnblogs.com/vamei/archive/2012/09/13/2682778.html)
-
+[python的另一个有效的入门级参考：kaggle python教程](https://www.kaggle.com/learn/python)
 
 ## Python基础
 
@@ -274,3 +274,15 @@ L2会同时发生变化，因为L1和L2的指向没有发生变化，依然指�
 
 （3）copy深拷贝
 
+### python的模块测试
+
+- 时间测试
+
+- 断点调试
+
+- python的字节码
+  - 要更深一层理解python内部的运行机制，需要知道python的字节码，
+  它是一种类似汇编指令的中间语言，但一个字节码指令并不是对应一个机器指令。
+  字节码可以通过引入dis模块进行分析
+
+### 学习python的内建库

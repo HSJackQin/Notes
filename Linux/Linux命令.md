@@ -121,10 +121,20 @@ deb-src http://mirrors.163.com/ubuntu/ bionic-backports main restricted universe
 - `Ctrl + C`：中止运行中的命令
 - `Ctrl + Z`：暂停运行中的命令
 
-### （2）文件管理
+### （2）目录及文件管理
+
+- 处理目录的常用命令
+  - `mkdir [-mp]`：`-m`用于在创建目录时配置目录权限，`-p`用于递归的创建目录
+  - `rmdir [-p]`：只能（递归的）删除空目录，如果目录下有文件，应该用`rm`命令删除
+  - `rm [-i -rf]`：`-i`即互动模式，在删除前系统会询问是否确定，`-rf`中`-r`是递归删除，常用在目录的删除，`-f`就是force，忽略不存在的文件，直接删除不报告。**`rm -rf`一定要慎用！**
+  - `cp [-i]`：`-i`是互动模式
 
 - 文件操作
   - `ls`
+  - `cat`
+  - `head`
+  - `tail`
+  - `more/less`
   
 - 下载和传输
   - scp
@@ -155,10 +165,14 @@ cat /etc/passwd | /bin/bash | wc -l
 
 - grep
 
+grep是对文件中的内容的搜索
+
 - find
 
 `find path -name filename`:在指定目录下查找名字符合的文件
 `find path -name filename -exec command {} \`:对匹配的文件执行该参数所给出的shell命令
+
+  - 还可以按照文件的各种属性（比如：修改时间，大小，权限，是否为空等）进行查找
 
 - sed
 
@@ -198,6 +212,8 @@ awk不仅可以通过命令行调用，还可以以shell脚本的方式运行。
 
 `awk 'NR==2,NR==4 {print}' filename`:显示文本的2~4行
 
+`awk '{if(NR>=20 && NR<=30) print $1}' filename`：只查看文件的第20-30行，并打印每行的第一个字段（默认用分隔符分割，当然也可以用`-F '\t'`参数指定特定的分隔符）
+
 - sort
 
 sort命令常用参数：
@@ -205,10 +221,12 @@ sort命令常用参数：
 `-f`:忽略大小写
 `-r`:反向排序
 `-t`:指定分隔符，默认是Tab
+`-n`:按照数值的大小进行排序
 `-k`:指定以哪列进行排序
 
 `sort -k 1 filename`:以第一列为标准进行排序
 `sort -t ":" -k 2 -r filename`:以':'为分隔符，按照第二列的反序进行排序
+`sort -t " " -k 1.2,1.2, -nrk 3,3 facebook.txt`:来一个复杂的~ `-k 1.2, 1.2`表示只按照第一个域的第二个字符进行排序，逗号前后表示开始和结束的字符，`-nrk 3,3`表示按照第3个域的数值反序进行排序，不同参数可以连起来写
 
 - uniq
 
@@ -223,4 +241,10 @@ sort命令常用参数：
 - nano
 
 Linux默认的文本编辑器（另外一个是vi）
+
+- iconv
+
+Linux转编码命令
+
+- nohup
 
