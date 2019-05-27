@@ -71,7 +71,7 @@ deb-src http://mirrors.163.com/ubuntu/ bionic-backports main restricted universe
   - chromium:
   
     - `sudo apt install chromium-browser`  
-  
+
 9. 安装anaconda及配置vscode
 
   - 安装Anaconda
@@ -240,11 +240,16 @@ sort命令常用参数：
 
 - nano
 
-Linux默认的文本编辑器（另外一个是vi）
+  Linux默认的文本编辑器（另外一个是vi）
 
 - iconv
 
-Linux转编码命令
+  Linux转编码命令
 
 - nohup
 
+  常用于将输出信息重定向
+
+- crontab
+
+  常用，用来定期执行程序的命令
