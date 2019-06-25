@@ -61,7 +61,7 @@ deb-src http://mirrors.163.com/ubuntu/ bionic-backports main restricted universe
     - 先安装fcitx：`sudo apt install fcitx`
     - `Language&support`里面添加中文
     - 官网下载linux sougou文件
-    - 安装：
+    - 安装：<u></u>
     ```bash
     sudo apt -f install
     sudo dpkg -i sogoupinyin_2.2.0.0108_amd64

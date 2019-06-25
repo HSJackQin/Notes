@@ -1,6 +1,6 @@
 [TOC]
 
-## Java学习
+## Java基础语法
 
 - 秦晋琦 2019年5月
 
@@ -244,13 +244,206 @@ protected 可以修饰数据成员，构造方法，方法成员，**不能修�
 
 ### Java循环结构
 
+Java有三种主要的循环结构：
+
+- while循环
+- do...while循环
+- for循环
+
+#### while循环
+
+```java
+public class Test {
+   public static void main(String args[]) {
+      int x = 10;
+      while( x < 20 ) {
+         System.out.print("value of x : " + x );
+         x++;
+         System.out.print("\n");
+      }
+   }
+}
+```
+
+#### do...while循环
+
+因为booler表达式在循环体后面，所以至少执行一次
+
+```java
+public class Test {
+    public static void main(String args[]){
+        int x = 10;
+        do{
+            System.out.print("value of x: " + x);
+            x++;
+            System.out.print("\n");
+        }while(x < 20);
+    }
+}
+```
+
+#### for循环
+
+```java
+public class Test{
+    public static void main(String args[]){
+        for(int x = 10; x < 20; x = x+1){  //(初始化（可以为空）；布尔表达式；更新)
+            System.out.print("value of x: " + x);
+            System.out.print("\n");
+        }
+    }
+}
+```
+
+#### Java增强for循环
+
+Java5引入了一种主要用于数组的增强型for循环。
+
+```java
+for(声明语句：表达式)
+{
+    //代码句子
+}
+```
+
+**声明语句**：声明新的局部变量，类型必须和数组元素类型匹配。其作用域限定在循环语句块，其值与此时数组元素的值相等。
+
+**表达式**：表达式是要访问的数组名，或者是返回值为数组的方法。
+
+实例：
+
+```java
+public class Test{
+    public static void main(String args[]){
+        int [] numbers = {10,20,30,40,50};
+        for (int x : numbers){
+            System.out.print(x);
+            System.out.print(",");
+        }
+        System.out.print("\n");
+        String [] names = {"James","Larry","Tom","Lacy"};
+        for (String name : names){
+            System.out.print(name);
+            System.out.print(",");
+        }
+    }
+}
+```
+
+#### break关键字
+
+break主要用在循环语句或者switch语句中，用来跳出整个语句块。
+
+break跳出最里层的循环，并且继续执行该循环下面的语句。
+
+```java
+public class Test{
+    public static void main(String args[]){
+        int [] numbers = {10,20,30,40,50};
+        for (int x : numbers){
+            if(x == 30){
+                break;
+            }
+            System.out.print(x);
+            System.out.print("\n");
+        }
+    }
+}
+```
+
+#### continue关键字
+
+continue适用于任何循环控制结构中，作用是让程序立刻跳转到下一次循环的迭代。
+
+在for循环中，continue语句使程序立刻跳转到更新语句。
+
+在while或者do...while中，程序立刻跳转到判断语句。
+
+```java
+public class Test{
+    public static void main(String args[]){
+        int [] numbers = {10,20,30,40,50};
+        for (int x : numbers){
+            if(x == 30){
+                continue;
+            }
+            System.out.print(x);
+            System.out.print("\n");
+        }
+    }
+}
+```
 
 
 
+### Java条件语句
 
+#### if
 
+```java
+if(booler exp){
+    //if true, execute;
+}
+```
 
+#### if...else
 
+```java
+public class Test {
+ 
+   public static void main(String args[]){
+      int x = 30;
+ 
+      if( x < 20 ){
+         System.out.print("这是 if 语句");
+      }else{
+         System.out.print("这是 else 语句");
+      }
+   }
+}
+```
+
+#### if... else if... else
+
+- 一旦其中一个else if语句检测为true，其他else if和最终的else都跳过执行。
+
+```java
+public class Test {
+   public static void main(String args[]){
+      int x = 30;
+ 
+      if( x == 10 ){
+         System.out.print("Value of X is 10");
+      }else if( x == 20 ){
+         System.out.print("Value of X is 20");
+      }else if( x == 30 ){
+         System.out.print("Value of X is 30");
+      }else{
+         System.out.print("这是 else 语句");
+      }
+   }
+}
+```
+
+### Java switch case语句
+
+语法
+
+```java
+switch(expression){
+    case value :
+       //语句
+       break; //可选
+    case value :
+       //语句
+       break; //可选
+    //你可以有任意数量的case语句
+    default : //可选
+       //语句
+}
+```
+
+- 注意switch的几种情况下的输出。
 
 ---
 
