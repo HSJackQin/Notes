@@ -158,7 +158,7 @@ class Solution:
 
 ---
 
-> 10.斐波那契额数列
+> 10.斐波那契数列
 
 应避免用递归，采用自底向上的方法。
 
@@ -194,7 +194,7 @@ class Solution:
             if right - left == 1:
                 mid = right
                 break
-            mid == (left + right) // 2
+            mid = (left + right) // 2
             if rotateArray[left] == rotateArray[mid] and rotateArray[mid] == rotateArray[right]:
                 return self.InOrder(rotateArray, left, right)
             if rotateArray[left] <= rotateArray[mid]:
@@ -210,7 +210,7 @@ class Solution:
                 res = rotateArray[i]
         return res
 ```
-**代码执行有误，死循环**
+**之前一直死循环，是因为一个赋值的等号写成了'=='，编程基本语法上一定要仔细**
 
 ---
 
@@ -225,7 +225,7 @@ class Solution:
 
 ```python
 class Solution:
-    def hasPath(self, matrix, rows, cols, path):
+    def hasPath(self, matrix, rows, cols, path): # path代表路径长度
         if matrix == [] or rows <= 0 or cols <= 0 or not path:
             return False
         lengthPath = 0            #表示此时匹配的是字符串的第几个元素，和下面的visited一样，都是要维护的全局变量
@@ -305,7 +305,20 @@ class Solution:
 
 > 15.二进制中1的个数
 
+```python
+class Solution:
+    def NumberOf1(self, n):
+        # write code here
+        count = 0
+        if n < 0:
+            n = n & 0xffffffff
+        while n != 0:
+            count += 1
+            n = (n - 1) & n
+        return count
+```
 
+---
 
 > 18.删除链表的节点
 
@@ -364,6 +377,12 @@ class Solution:
                 pNode = pDelete
         return pHead
 ```
+
+---
+
+> 19.正则表达式匹配
+
+
 
 ---
 
@@ -801,6 +820,28 @@ class Solution:
 
 ---
 
+> 40.最小的k个数
+
+partition思想实现
+
+```python
+class Solution:
+    def GetLeastNumbers_Solution(self, tinput, k):
+        if not tinput or k > len(tinput) or k <= 0:
+            return []
+        tinput = self.quick_sort(tinput)
+        return tinput[:k]
+    def quick_sort(self, tinput):
+        if not tinput:
+            return []
+        pivot = tinput[0]
+        left = self.quick_sort([x for x in tinput[1:] if x < pivot])
+        right = self.quick_sort([x for x in tinput[1:] if x >= pivot])
+        return left + [pivot] + right
+```
+
+---
+
 > 42.连续子数组的最大和
 
 从头开始遍历，并把当前的最大值暂存起来，这种思路和利用循环实现的动态规划是一样的
@@ -821,6 +862,125 @@ class Solution:
                 curSum = 0
             i += 1
         return curMax
+```
+
+---
+
+> 43.1~n整数中1出现的次数
+
+---
+
+> 44.数字序列中某一位的数字
+
+---
+
+> 45.把数组排成最小的数
+
+自定义大小规则 + 冒泡排序
+
+```python
+# -*- coding:utf-8 -*-
+class Solution:
+    def PrintMinNumber(self, numbers):
+        # write code here
+        if numbers is None:
+            return 
+        str_num = [str(i) for i in numbers]
+        for i in xrange(len(numbers)-1,0,-1):
+            for j in xrange(i):
+                if str_num[j] + str_num[j+1] > str_num[j+1]+str_num[j]:
+                    str_num[j], str_num[j+1] = str_num[j+1], str_num[j]
+        return ''.join(str_num)
+```
+
+---
+
+> 47.礼物的最大价值
+
+（1）第一步优化：基于循环而不是递归从而避免大量计算
+
+```python
+def get_max_value1(matrix)
+```
+
+（2）第二步优化：由维护二维数组变为维护一维数组
+
+```python
+def get_max_value2(matrix):
+    if not isinstance(matrix,list) or len(matrix) == 0 or not isinstance(matrix[0],list) \
+        or len(matrix[0]) == 0:
+        return
+    num_row = len(matrix)
+    num_col = len(matrix[0])
+    for row in matrix:
+        if not isinstance(row,list) or len(row) != num_col:
+            return
+    max_value = [0]*num_col
+    for i in range(num_row):
+        for j in range(num_col):
+            up, left = 0, 0
+            if i > 0:
+                up = max_value[j]
+            if j > 0:
+                left = max_value[j-1]
+            max_value[j] = matrix[i][j] + max(up, left)
+    return max_value[-1]
+```
+
+---
+
+> Leetcode 62/63 不同路径
+
+考察路径中加入障碍的情况
+
+---
+
+> 48.最长的不含重复字符的子字符串
+
+```python
+def longest_substring_without_duplication(string):
+    if not isinstance(string,str) or len(string) == 0:
+        return
+    
+    cur_length = 0
+    max_length = 0
+    position = [-1]*26 #用来记录每个字母上次出现的位置
+
+    for i, ch in enumerate(string):
+        if ord(ch) < ord("a") or ord(ch) > ord("z"):
+            return
+        index_of_ch = ord(ch) - a #用每个字母独特的位置表示该字母
+        if position[i] == -1 or (i - position[index_of_ch]) > max_length:
+            cur_length += 1
+        else:
+            cur_length = i - position(index_of_ch)
+        if cur_length > max_length:
+            max_length = cur_length
+        position(index_of_ch) = i #将当前的字母出现位置记录下来
+
+    return max_length
+```
+
+---
+
+> Leetcode 131 分割回文串
+
+---
+
+> Leetcode 132 分割回文串II
+
+---
+
+> 50.第一个只出现一次的字符
+
+（1）字符串中第一个只出现一次的字符
+
+建立哈希表（字典）记录各字符出现的次数，比较简单。
+
+（2）字符流中第一个只出现一次的字符
+
+```python
+
 ```
 
 ---
@@ -864,7 +1024,45 @@ class Solution:
 
 ---
 
+> 53.在排序数组中查找数字
+
+（1）数字在排序数组中出现的次数
+
+```python
+
+```
+
+---
+
 > 54.二叉搜索树的第K大节点
+
+考察二叉树的中序遍历
+
+```python
+# -*- coding:utf-8 -*-
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+class Solution:
+    # 返回对应节点TreeNode
+    def KthNode(self, pRoot, k):
+        # write code here
+        if not pRoot or not k:
+            return 
+        res = []
+        def traverse(node):
+            if len(res) >= k or not node:
+                return
+            traverse(node.left)
+            res.append(node)
+            traverse(node.right)
+        traverse(pRoot)
+        if len(res) < k:
+            return
+        return res[k-1]
+```
 
 > 55.二叉树的深度
 
@@ -945,8 +1143,49 @@ if __name__ = "__main__":
 
 （2）数学方法求解
 
+```python {.line-numbers}
+Time: O(n)
+Space: O(1)
+
+def last_remain(n,m):
+    if n < 1 or m < 1:
+        return
+    last = 0
+    for i in range(1,n):
+        last = (last + m) % (i + 1)
+    return last
+```
 
 ---
 
 > 68.树中两个节点的最低公共祖先
 
+（1）二叉搜索树的最低（深）公共祖先(Leetcode No.235)
+
+```python {.line-numbers}
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+class Solution:
+    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+        s, b = sorted([p.val, q.val])
+        while not s <= root.val <= b:
+            root = root.left if root.val >= s else root.right
+        return root
+```
+
+（2）二叉树的最低公共祖先(Leetcode No.236)
+
+这是一个回溯法思想可以解决的问题。回溯问题一般可以利用递归的方式实现。
+
+```python {.line-numbers}
+class Solution:
+    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+        if root in (None, p, q):
+            return root
+        left, right = [self.lowestCommonAncestor(root, p, q) for root in (root.left, root.right)]
+        return root if left and right else left or right
+```

@@ -100,6 +100,12 @@
 - 李航
 - https://www.jianshu.com/p/631a3fe4542e
 
+**逻辑回归是一个凸优化问题
+
+写出其优化的目标为
+
+$$\min _{\theta} L(\theta)=\sum_{i=1}^{n} \log \left(1+\exp \left(-y_{i} \theta^{\mathrm{T}} x_{i}\right)\right)$$
+
 **优化算法**
 
 - `牛顿法、拟牛顿等`
